@@ -1,4 +1,4 @@
-module Parser(parseMarkdown) where
+module Parser where
 
 import Text.Parsec
 import Text.Parsec.String (Parser)
