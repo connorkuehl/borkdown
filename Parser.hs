@@ -23,7 +23,7 @@ parseMarkdown s = case (parse doc "" s) of
 doc :: Parser Document
 doc =  para `sepEndBy` eop
 
-eop = count 2 endOfLine
+eop = lookAhead (count 2 endOfLine) <|> (eof >> return [])
 
 para :: Parser Paragraph
 para = try heading <|> prose
@@ -31,7 +31,7 @@ para = try heading <|> prose
 heading :: Parser Paragraph
 heading = do hs <- many1 (char '#')
              spaces
-             h <- manyTill anyChar (try (lookAhead eop))
+             h <- manyTill anyChar (lookAhead eop)
              return $ Heading (length hs) h
 
 prose :: Parser Paragraph
