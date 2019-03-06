@@ -9,7 +9,7 @@ document    :: Document -> String
 document ps = "<html><body>" ++ concat (map paragraph ps) ++ "</body></html>"
 
 paragraph :: Paragraph -> String
-paragraph (Heading i s) = "<h1>" ++ s ++ "</h1>"
+paragraph (Heading i s) = "<h" ++ show i ++ ">" ++ s ++ "</h" ++ show i ++ ">"
 paragraph (Prose ts) = "<p>" ++ concat (map text ts) ++ "</p>"
 
 text :: Text -> String
