@@ -44,7 +44,7 @@ formatted :: Parser Text
 formatted = try bold <|> try italic <|> plain
 
 plain :: Parser Text
-plain = Plain <$> manyTill anyChar (try (lookAhead (oneOf "*\n")))
+plain = Plain <$> manyTill anyChar (try (lookAhead (string "*" <|> eop)))
 
 bold :: Parser Text
 bold = Bold <$> between (string "**") (string "**") formatted
