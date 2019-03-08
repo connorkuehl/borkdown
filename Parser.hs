@@ -1,53 +1,33 @@
 module Parser where
 
-import Text.Parsec
-import Text.Parsec.String (Parser)
 import Data.Char
 
 type Document = [Paragraph]
 
 data Paragraph = Heading Int String
-               | Prose [Text]
+               | Prose [String]
   deriving Show
 
-data Text = Plain String
-          | Bold Text
-          | Italic Text
+data Line = Head Int String
+          | Blank
+          | Text String
   deriving Show
 
-parseMarkdown   :: String -> Document
-parseMarkdown s = case (parse doc "" s) of
-                    Left err -> []
-                    Right d -> d
+doc :: String -> Document
+doc = markdown . map classify . lines
 
-doc :: Parser Document
-doc =  para `sepEndBy` eop
+markdown               :: [Line] -> Document
+markdown []            = []
+markdown (Head n h:ls) = Heading n h : markdown ls
+markdown (Blank:ls)    = markdown ls
+markdown (Text l:ls)   = text [l] ls
 
-eop = lookAhead (count 2 endOfLine) <|> (eof >> return [])
+classify :: String -> Line
+classify line | all isSpace line = Blank
+              | otherwise = case span ('#'==) line of
+                              ([], s) -> Text s
+                              (hs, s) -> Head (length hs) (dropWhile isSpace s)
 
-para :: Parser Paragraph
-para = try heading <|> prose
-
-heading :: Parser Paragraph
-heading = do hs <- many1 (char '#')
-             spaces
-             h <- manyTill anyChar (lookAhead eop)
-             return $ Heading (length hs) h
-
-prose :: Parser Paragraph
-prose = Prose <$> many1 text
-
-text :: Parser Text
-text = formatted
-
-formatted :: Parser Text
-formatted = try bold <|> try italic <|> plain
-
-plain :: Parser Text
-plain = Plain <$> manyTill anyChar (try (lookAhead (string "*" <|> eop)))
-
-bold :: Parser Text
-bold = Bold <$> between (string "**") (string "**") formatted
-
-italic :: Parser Text
-italic = Italic <$> between (string "*") (string "*") formatted
+text                :: [String] -> [Line] -> Document
+text ss (Text s:ls) = text (s:ss) ls
+text ss ls          = Prose (reverse ss) : markdown ls

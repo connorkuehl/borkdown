@@ -1,5 +1,5 @@
-import Parser (parseMarkdown)
-import DocumentGenerator
+import Parser (doc)
+import DocumentGenerator (generate)
 
 parse :: String -> String
-parse = (generate . parseMarkdown)
+parse = (generate . doc)
