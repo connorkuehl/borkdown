@@ -14,4 +14,4 @@ generateHtml doc = "<html><body>" ++ (concat . map generateParagraph) doc ++ "</
         generateInline (Link desc url) = "<a href=" ++ url ++ ">" ++ desc ++ "</a>"
         generateInline (Italic i) = "<em>" ++ generateInline i ++ "</em>"
         generateInline (Bold b) = "<strong>" ++ generateInline b ++ "</strong>"
-        generateInline (Code c) = "<pre>" ++ c ++ "</pre>"
+        generateInline (Code c) = "<code>" ++ c ++ "</code>"
