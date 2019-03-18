@@ -1,3 +1,5 @@
+module Parse where
+
 import Text.Parsec
 import Text.Parsec.String (Parser)
 import Data.Char
