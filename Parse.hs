@@ -11,14 +11,14 @@ type Paragraph = Block
 data Block = Heading Int String
            | Para [Inline]
            | Blank
-  deriving Show
+  deriving (Eq, Show)
 
 data Inline = Plain String
             | Link String String
             | Italic Inline
             | Bold Inline
             | Code String
-  deriving Show
+  deriving (Eq, Show)
 
 -- parseDoc parses a string that represents an entire Markdown
 -- document into its block representation for document generation.
