@@ -36,6 +36,8 @@ parseDoc = coalesce . removeBlanks . map toBlock . lines
     removeBlanks []         = []
     removeBlanks (Blank:bs) = removeBlanks bs
     removeBlanks (b:bs)     = b:removeBlanks bs
+
+    -- Combine all adjacent list item blocks
     coalesce :: [Block] -> [Block]
     coalesce [] = []
     coalesce (OrdList fs:OrdList ss:is) = (OrdList (fs ++ ss)):coalesce is
