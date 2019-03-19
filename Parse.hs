@@ -23,6 +23,7 @@ data Inline = Plain String
             | Link String String
             | Italic Inline
             | Bold Inline
+            | Strike Inline
             | Code String
   deriving (Eq, Show)
 
@@ -100,20 +101,21 @@ inlineLength (Bold b)   = inlineLength b + (length "****")
 inlineLength (Italic i) = inlineLength i + (length "**")
 inlineLength (Link d u) = (length (d ++ u)) + (length "()[]")
 inlineLength (Code c)   = (length c) + (length "``")
+inlineLength (Strike s) = (inlineLength s) + (length "~~~~")
 
 -- inlineElements is a collection of parsers that will attempt
 -- to parse inline elements.
 inlineElements :: [Parser Inline]
-inlineElements = [(try bold <|> italic), link, code]
+inlineElements = [(try bold <|> try italic <|> strike), link, code]
 
 -- Parsers!
 
 text :: Parser Inline
-text = try bold <|> try italic <|> plain
+text = try bold <|> try italic <|> try strike <|> plain
 
 plain :: Parser Inline
 plain = do c <- anyChar -- Explicitly take one char to avoid empty strings
-           rest <- manyTill anyChar (lookAhead (oneOf "*"))
+           rest <- manyTill anyChar (lookAhead (oneOf "*~"))
            return $ Plain (c:rest)
 
 bold :: Parser Inline
@@ -121,6 +123,9 @@ bold = Bold <$> between (string "**") (string "**") text
 
 italic :: Parser Inline
 italic = Italic <$> between (string "*") (string "*") text
+
+strike :: Parser Inline
+strike = Strike <$> between (string "~~") (string "~~") text
 
 link :: Parser Inline
 link = do desc <- between (char '[') (char ']') (manyTill anyChar (lookAhead (char ']')))
