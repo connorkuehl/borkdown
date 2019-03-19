@@ -111,7 +111,7 @@ inlineElements = [(try bold <|> try italic <|> strike), link, code]
 -- Parsers!
 
 text :: Parser Inline
-text = try bold <|> try italic <|> try strike <|> plain
+text = try bold <|> try italic <|> try strike <|> try link <|> plain
 
 plain :: Parser Inline
 plain = do c <- anyChar -- Explicitly take one char to avoid empty strings
