@@ -8,10 +8,10 @@ Markerel currently supports:
 
 * `atx` style headers (`## I'm a level 2 header`)
 * **Bold text** (`**I'm a piece of bold text!**`)
-* *Italic text* (`*I'm leaning over because I'm italic!`)
+* *Italic text* (`*I'm leaning over because I'm italic!*`)
 * [Links](#) (`[text](URL)`)
 * ~~Strikethrough~~ (`~~cross this text off~~`)
-* `Inline code` (``Markerel.hs``)
+* `Inline code` (`\`Markerel.hs\``)
 * Plain text :-)
 * Unordered lists (like this one!)
 * Ordered lists (enumerated lists, with numbers at the beginning)
