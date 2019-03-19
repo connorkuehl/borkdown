@@ -18,6 +18,8 @@ Markerel currently supports:
 
 ## Usage
 
+Build it with `make`
+
 Markerel will only talk to `stdin` and `stdout` right now, so you'll probably
 end up using it in a pipe-y IO-redirect-y kind of way.
 
