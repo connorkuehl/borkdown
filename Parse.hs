@@ -40,8 +40,8 @@ parseDoc = coalesce . removeBlanks . map toBlock . lines
     -- Combine all adjacent list item blocks
     coalesce :: [Block] -> [Block]
     coalesce [] = []
-    coalesce (OrdList fs:OrdList ss:is) = (OrdList (fs ++ ss)):coalesce is
-    coalesce (UnordList fs:UnordList ss:is) = (UnordList (fs ++ ss)):coalesce is
+    coalesce (OrdList fs:OrdList ss:is) = coalesce (OrdList (fs ++ ss):is)
+    coalesce (UnordList fs:UnordList ss:is) = coalesce (UnordList (fs ++ ss):is)
     coalesce (i:is) = i:coalesce is
 
 -- This classification function was written by Mark Jones
